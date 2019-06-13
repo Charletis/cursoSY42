@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado Alumnos{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Listado de Alumnos</h1>
+
+    <ul>
+        <li>Your template at <code><a href="{{ 'C:/laragon/www/cursoSY42/practicaAlumnos/alumnos/templates/alumno/index.html.twig'|file_link(0) }}">templates/alumno/index.html.twig</a></code></li>
+        {% for alumno in alumnos %}
+            <li>
+                <p>Nº Expediente: <span>{{ alumno.nExpediente }}</span></p>
+                <p>Nombre: <span>{{ alumno.nombre }}</span></p>
+                <p>Apellidos <span>{{ alumno.apellidos }}</span></p>
+                <p>Fecha Nacimiento: <span>{{ alumno.fechaNacimiento|date('d-m-Y') }}</span></p>
+                <p>Género: <span>{{ alumno.sexo }}</span></p>
+                <p>Email: <span>{{ alumno.email }}</span></p>
+                <p>Teléfono: <span>{{ alumno.telefono }}</span></p>
+                <p>Grado: <span>{{ alumno.grado.nombre }}</span></p>
+                <p><a href="{{ path('alumnos') }}">Ver Notas</a></p>
+                <p><a href="{{ path('alumnos') }}">Ver Asignaturas</a></p>
+            </li>
+        {%  endfor %}
+    </ul>
+</div>
+{% endblock %}
