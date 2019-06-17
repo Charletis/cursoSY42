@@ -13,7 +13,6 @@
 
     <ul>
         <li>Your template at <code><a href="{{ 'C:/laragon/www/cursoSY42/practicaAlumnos/alumnos/templates/alumno/index.html.twig'|file_link(0) }}">templates/alumno/index.html.twig</a></code></li>
-        {% for alumno in alumnos %}
             <li>
                 <p>Nº Expediente: <span>{{ alumno.nExpediente }}</span></p>
                 <p>Nombre: <span>{{ alumno.nombre }}</span></p>
@@ -23,10 +22,13 @@
                 <p>Email: <span>{{ alumno.email }}</span></p>
                 <p>Teléfono: <span>{{ alumno.telefono }}</span></p>
                 <p>Grado: <span>{{ alumno.grado.nombre }}</span></p>
+                <h3>Asignaturas</h3>
+                                    {% for asignatura in alumno.asignatura %}
+                                        <li>{{ asignatura.nombre }}</li>
+                                    {% endfor %}
                 <p><a href="{{ path('alumnos') }}">Ver Notas</a></p>
                 <p><a href="{{ path('alumnos') }}">Ver Asignaturas</a></p>
             </li>
-        {%  endfor %}
     </ul>
 </div>
 {% endblock %}

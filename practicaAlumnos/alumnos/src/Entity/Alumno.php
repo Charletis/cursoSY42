@@ -90,11 +90,21 @@ class Alumno
     private $asignatura;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Nota", mappedBy="alumno")
+     * @ORM\OrderBy({"fecha" = "DESC"})
+     */
+    private $notas;
+
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->asignatura = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notas = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId(): ?int
@@ -221,6 +231,34 @@ class Alumno
         if ($this->asignatura->contains($asignatura)) {
             $this->asignatura->removeElement($asignatura);
             $asignatura->removeAlumno($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notas[]
+     */
+    public function getNotas(): Collection
+    {
+        return $this->notas;
+    }
+
+    public function addNota(Nota $nota): self
+    {
+        if (!$this->nota->contains($nota)) {
+            $this->nota[] = $nota;
+            $nota->addAlumno($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNota(Nota $nota): self
+    {
+        if ($this->nota->contains($nota)) {
+            $this->nota->removeElement($nota);
+            $nota->removeAlumno($this);
         }
 
         return $this;

@@ -23,7 +23,7 @@
                 <p>Teléfono: <span>{{ alumno.telefono }}</span></p>
                 <p>Grado: <span>{{ alumno.grado.nombre }}</span></p>
                 <p><a href="{{ path('notas', {'alumno': alumno.id}) }}">Ver Notas</a></p>
-                <p><a href="{{ path('alumnos') }}">Ver Asignaturas</a></p>
+                <p><a href="{{ path('asignaturas', {'alumno': alumno.id}) }}">Ver Asignaturas</a></p>
             </li>
         {%  endfor %}
     </ul>

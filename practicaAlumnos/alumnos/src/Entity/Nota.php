@@ -55,7 +55,7 @@ class Nota
     /**
      * @var \Alumno
      *
-     * @ORM\ManyToOne(targetEntity="Alumno")
+     * @ORM\ManyToOne(targetEntity="Alumno", inversedBy="notas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="alumno_id", referencedColumnName="id")
      * })
