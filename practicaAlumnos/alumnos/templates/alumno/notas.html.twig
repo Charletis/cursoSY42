@@ -24,6 +24,7 @@
                 <h3>Notas</h3>
                 <ul>
                     {% for nota in alumno.notas %}
+                    {% dump(nota) %}
                         <li>{{ nota.asignatura.nombre }} - {{ nota.nota }}</li>
                     {% endfor %}
                 </ul>
