@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use App\Entity\Alumno;
 use App\Entity\Asignatura;
+use App\Entity\Nota;
 
 class AlumnoController extends AbstractController
 {
@@ -30,8 +31,11 @@ class AlumnoController extends AbstractController
         if(!$alumno){
             $this->createNotFoundException("El alumno no existe");
         }
+        $em = $this->getDoctrine()->getManager();
+        $notas = $em->getRepository(Nota::class)->getLastNotas($alumno);
         return $this->render('alumno/notas.html.twig', [
-            'alumno' => $alumno
+            'alumno' => $alumno,
+            'notas' => $notas
         ]);
     }
 
@@ -43,7 +47,7 @@ class AlumnoController extends AbstractController
             $this->createNotFoundException("El alumno no existe");
         }
         $em = $this->getDoctrine()->getManager();
-        $asignaturas = $em->getRepository('Asignaturas::class')->findAll();
+        $asignaturas = $em->getRepository(Asignatura::class)->findAll();
         return $this->render('alumno/asignaturas.html.twig', [
             'alumno' => $alumno,
             'asignaturas' => $asignaturas
@@ -54,25 +58,47 @@ class AlumnoController extends AbstractController
     * @Route("/asignaturas/{asignatura}/baja/{alumno}", name="asignatura_baja")
     */
     public function asignaturaBajaAction(Asignatura $asignatura, Alumno $alumno){
-    $em = $this->getDoctrine()->getEntityManager();
-    $asignatura->removeAlumno($alumno);
-    $em->persist($asignatura);
-    $em->flush();
-    
-    return new Response('true');
-    
+        $em = $this->getDoctrine()->getManager();
+        try {
+            $asignatura->removeAlumno($alumno);
+            $em->persist($asignatura);
+            $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Se dió de baja en '.$asignatura->getNombre().'.'
+            );
+
+        } catch (Exception $e) {
+            $this->addFlash(
+                'error',
+                'La acción no pudo llevarse a cabo.'
+            );
+        }
+        return $this->redirectToRoute('asignaturas', array('alumno' => $alumno->getId()));
     }
     
     /**
     * @Route("/asignaturas/{asignatura}/matricular/{alumno}", name="asignatura_matricular")
     */
     public function asignaturaMatricularAction(Asignatura $asignatura, Alumno $alumno){
-    $em = $this->getDoctrine()->getEntityManager();
-    $asignatura->addAlumno($alumno);
-    $em->persist($asignatura);
-    $em->flush();
-    
-    return new Response('true');
-    
+    $em = $this->getDoctrine()->getManager();
+        try {
+            $asignatura->addAlumno($alumno);
+            $em->persist($asignatura);
+            $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Se matriculó en '.$asignatura->getNombre().'.'
+            );
+
+        } catch (Exception $e) {
+            $this->addFlash(
+                'error',
+                'La acción no pudo llevarse a cabo.'
+            );
+        }
+        return $this->redirectToRoute('asignaturas', array('alumno' => $alumno->getId()));
     }
 }

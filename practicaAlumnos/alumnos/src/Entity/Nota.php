@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Nota
  *
  * @ORM\Table(name="nota", indexes={@ORM\Index(name="IDX_C8D03E0DC5C70C5B", columns={"asignatura_id"}), @ORM\Index(name="IDX_C8D03E0DFC28E5EE", columns={"alumno_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\NotaRepository")
  */
 class Nota
 {

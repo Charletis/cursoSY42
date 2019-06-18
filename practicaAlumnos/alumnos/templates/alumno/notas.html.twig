@@ -3,33 +3,48 @@
 {% block title %}Notas Alumno Expediente - {{ alumno.nExpediente }}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
 <div class="example-wrapper">
+    {%  set sumNotas = 0 %}
+    {%  set cont = 0 %}
     <h1>Notas del alumno {{ alumno.nombre }} {{ alumno.apellidos }}</h1>
 
-    <ul>
-            <li>
-                <p>Nº Expediente: <span>{{ alumno.nExpediente }}</span></p>
-                <p>Nombre: <span>{{ alumno.nombre }}</span></p>
-                <p>Apellidos <span>{{ alumno.apellidos }}</span></p>
-                <p>Fecha Nacimiento: <span>{{ alumno.fechaNacimiento|date('d-m-Y') }}</span></p>
-                <p>Género: <span>{{ alumno.sexo }}</span></p>
-                <p>Email: <span>{{ alumno.email }}</span></p>
-                <p>Teléfono: <span>{{ alumno.telefono }}</span></p>
-                <p>Grado: <span>{{ alumno.grado.nombre }}</span></p>
-                <h3>Notas</h3>
-                <ul>
-                    {% for nota in alumno.notas %}
-                    {% dump(nota) %}
-                        <li>{{ nota.asignatura.nombre }} - {{ nota.nota }}</li>
-                    {% endfor %}
-                </ul>
-                <p><a href="{{ path('alumnos') }}">Volver al listado de alumnos</a></p>
-            </li>
-    </ul>
+    <table id="notas">
+        <thead>
+            <tr>
+                <th>Asignatura</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asig in alumno.asignatura %}
+                <tr>
+                    <td>{{ asig.nombre }}</td>
+                    <td>{{ notas[asig.nombre] }}
+                        {% if notas[asig.nombre] != '' %}
+                            {% if notas[asig.nombre] >= 5 %}
+                                &#128077;
+                            {% else %}
+                                &#128078;
+                            {% endif %}
+                            {% set sumNotas = sumNotas + notas[asig.nombre] %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% set cont = cont + 1 %}
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>MEDIA</th>
+                <th>{{ sumNotas/cont|round(2, 'common') }}{% if sumNotas/cont >= 5 %}
+                        &#128077;
+                    {% else %}
+                        &#128078;
+                    {% endif %}</th>
+            </tr>
+        </tfoot>
+    </table>
+    <p><a href="{{ path('alumnos') }}">Volver</a></p>
 </div>
+
 {% endblock %}
