@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use App\Entity\Alumno;
+use App\Entity\Asignatura;
 
 class AlumnoController extends AbstractController
 {
@@ -41,8 +42,37 @@ class AlumnoController extends AbstractController
         if(!$alumno){
             $this->createNotFoundException("El alumno no existe");
         }
+        $em = $this->getDoctrine()->getManager();
+        $asignaturas = $em->getRepository('Asignaturas::class')->findAll();
         return $this->render('alumno/asignaturas.html.twig', [
-            'alumno' => $alumno
+            'alumno' => $alumno,
+            'asignaturas' => $asignaturas
         ]);
+    }
+    
+    /**
+    * @Route("/asignaturas/{asignatura}/baja/{alumno}", name="asignatura_baja")
+    */
+    public function asignaturaBajaAction(Asignatura $asignatura, Alumno $alumno){
+    $em = $this->getDoctrine()->getEntityManager();
+    $asignatura->removeAlumno($alumno);
+    $em->persist($asignatura);
+    $em->flush();
+    
+    return new Response('true');
+    
+    }
+    
+    /**
+    * @Route("/asignaturas/{asignatura}/matricular/{alumno}", name="asignatura_matricular")
+    */
+    public function asignaturaMatricularAction(Asignatura $asignatura, Alumno $alumno){
+    $em = $this->getDoctrine()->getEntityManager();
+    $asignatura->addAlumno($alumno);
+    $em->persist($asignatura);
+    $em->flush();
+    
+    return new Response('true');
+    
     }
 }
