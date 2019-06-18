@@ -19,13 +19,8 @@
             {% for asig in alumno.asignatura %}
                 <tr>
                     <td>{{ asig.nombre }}</td>
-                    <td>{{ notas[asig.nombre] }}
+                    <td>{{ notas[asig.nombre]|nota|raw }}
                         {% if notas[asig.nombre] != '' %}
-                            {% if notas[asig.nombre] >= 5 %}
-                                &#128077;
-                            {% else %}
-                                &#128078;
-                            {% endif %}
                             {% set sumNotas = sumNotas + notas[asig.nombre] %}
                         {% endif %}
                     </td>
@@ -36,11 +31,7 @@
         <tfoot>
             <tr>
                 <th>MEDIA</th>
-                <th>{{ sumNotas/cont|round(2, 'common') }}{% if sumNotas/cont >= 5 %}
-                        &#128077;
-                    {% else %}
-                        &#128078;
-                    {% endif %}</th>
+                <th>{{ (sumNotas/cont)|nota|raw }}</th>
             </tr>
         </tfoot>
     </table>
