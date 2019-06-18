@@ -28,5 +28,30 @@
             </li>
         {%  endfor %}
     </ul>
+    <table id="asignaturas">
+    {% for asig in asignaturas %}
+    <td>{{ asig.codigo }}</td>
+    <td>{{ asig.nombre }}</td>
+    <td>{{ asig.grado.nombre }}</td>
+    {% if alumno is in asig.alumnos %}
+    <td><button type="button" value="dar de baja" onclick="baja({{ asig.id }},{{ alumno.id }})" /></td>
+    {% else %}
+    <td><button type="button" value="Matricular" onclick="matricular({{ asig.id }},{{ alumno.id }})" /></td>
+    {% endif %}
+    
+    {% endfor %}
+    </table>
 </div>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascripts">
+function baja (idAsignatura, idAlumno)
+{
+
+}
+function matricular (idAsignatura, idAlumno)
+{
+
+}
+</script>
 {% endblock %}
